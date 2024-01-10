@@ -1,0 +1,207 @@
+.search-form {
+  padding: 70px 0 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.search-form__container {
+  display: flex;
+  background-color: rgba(47, 47, 47, 1);
+  height: 72px;
+  border-radius: 7px;
+  margin-top: 18px;
+  max-width: 1138px;
+  width: calc(708px + 430*(100vw - 768px)/(1280 - 768));
+  margin-bottom: 69px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-form__container {
+    margin-top: 29px;
+    justify-content: space-between;
+    margin-bottom: 110px;
+    width: calc(300px + 408*(100vw - 320px)/(768 - 320));
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .search-form__container {
+    background-color: inherit;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin-bottom: 43px;
+  }
+}
+
+.search-form__searcher {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+@media screen and (max-width: 630px) {
+  .search-form__searcher {
+    background-color: rgba(47, 47, 47, 1);
+    height: 72px;
+    border-radius: 7px;
+  }
+}
+
+.search-form__searcher::after {
+  content:"";
+  height: 40px;
+  width: 1px;
+  background-color: rgba(66, 66, 66, 1);
+}
+
+@media screen and (max-width: 630px) {
+  .search-form__searcher::after {
+    display: none;
+  }
+}
+
+.search-form__input {
+  border: none;
+  outline: none;
+  background: transparent url('../../images/icon_search.svg') no-repeat 19px center;
+  height: 85%;
+  width: 93%;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.11;
+  padding: 6px 63px 6px;
+  color: inherit;
+}
+
+@media screen and (max-width: 630px) {
+  .search-form__input {
+    width: 75%;
+    background-image: none;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 6px 19px 6px;
+  }
+}
+
+.search-form__button {
+  background-color: rgba(66, 133, 244, 1);
+  border-radius: 20px;
+  color: inherit;
+  box-shadow: 0px 2px 9px 1px rgba(0, 0, 0, 0.7);
+  height: 34px;
+  width: 61px;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.63;
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin-right: 28px;
+  margin-left: auto;
+}
+
+.search-form__button:hover {
+  opacity: .8;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .search-form__button {
+    margin-right: 23px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-form__button {
+    margin-right: 19px;
+  }
+}
+
+.search-form__label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-form__label {
+    margin-left: 20px;
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .search-form__label {
+    margin-left: 0;
+    margin-top: 46px;
+  }
+}
+
+.search-form__checkbox_invisible {
+  clip-path: inset(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.search-form__checkbox_invisible + span {
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  background-color: rgba(52, 52, 52, 1);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.search-form__checkbox_invisible + span::after {
+  content:"";
+  position: absolute;
+  top: 2px;
+  left: 1px;
+  width: 14px;
+  height: 14px;
+  border: solid 1px rgba(255, 255, 255, 1);
+  border-radius: 50%;
+  background-color: rgba(160, 160, 160, 1);
+  transition: transform .3s;
+}
+
+.search-form__checkbox_invisible:checked + span::after {
+  transform: translateX(15px);
+  background-color: rgba(43, 224, 128, 1);
+}
+
+.search-form__tip {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.38;
+  margin: 0 30px 0 14px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-form__tip {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .search-form__tip {
+    font-size: 11px;
+    line-height: 1.63;
+    margin: 0 0 0 13px;
+  }
+}
+
+.search-form__underline {
+  height: 1px;
+  width: 100%;
+  background-color: rgba(47, 47, 47, 1);
+}
