@@ -1,0 +1,116 @@
+.movies__card {
+  box-sizing: border-box;
+  margin: 0;
+  overflow:hidden;
+  display: grid;
+  grid-template-areas:
+    "image image"
+    "title btn"
+    "line line"
+    "time .";
+  align-items: center;
+  position: relative;
+}
+
+.movies__image {
+  grid-area: image;
+  grid-column: span 2;
+  width: 270px;
+  height: 151px;
+  object-fit: cover;
+  box-sizing: border-box;
+  /*заглушка*/
+  /*background-image: url("../../images/pic__COLOR_pic.png");*/
+}
+
+@media screen and (max-width: 1160px) {
+  .movies__image {
+    width: 305px;
+    height: 171px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .movies__image {
+    width: 339px;
+    height: 190px;
+  }
+}
+
+@media screen and (max-width: 730px) {
+  .movies__image {
+    width: 300px;
+    height: 168px;
+  }
+}
+
+.movies__title {
+  grid-area: title;
+  margin: 0;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.2;
+  padding: 14px 0 29px;
+}
+
+.movies__like-btn {
+  grid-area: btn;
+  justify-self: end;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+  background-image: url('../../images/like-btn.svg');
+  background-repeat: no-repeat;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.movies__like-btn:hover {
+  opacity: .8;
+	cursor: pointer;
+}
+
+.movies__like-btn_active {
+  background-image: url('../../images/like-btn-active.svg');
+}
+
+.movies__delete-btn {
+  grid-area: btn;
+  justify-self: end;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+  background-image: url('../../images/movies-delete-btn.svg');
+  background-repeat: no-repeat;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  margin-bottom: 18px;
+  opacity: 0;
+}
+
+.movies__delete-btn:hover {
+  opacity: .8;
+	cursor: pointer;
+}
+
+.movies__underline {
+  grid-area: line;
+  grid-column: span 2;
+  height: 1px;
+  width: 100%;
+  background-color: rgba(66, 66, 66, 1);
+}
+
+.movies__timer {
+  grid-area: time;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.2;
+  color: rgba(139, 139, 139, 1);
+  padding-top: 6px;
+}

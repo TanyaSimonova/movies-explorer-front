@@ -1,0 +1,88 @@
+.header {
+	display: flex;
+	margin: 0 auto;
+  max-width: 1280px;
+	position: relative;
+	z-index: 1;
+}
+
+.header__logo {
+	height: 38px;
+	width: 38px;
+	background-image: url('../../images/logo.svg');
+	background-repeat: no-repeat;
+	margin: 18px 45px 0 70px;
+}
+
+.header__logo:hover {
+	opacity: .8;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .header__logo {
+    margin: 18px 45px 0 30px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .header__logo {
+		margin: 18px 0 0 14px;
+  }
+}
+
+.header__register {
+	text-decoration: none;
+	color: inherit;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px; 
+	margin: 29px 0 0 auto;
+}
+
+.header__register:hover {
+	opacity: .7;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 320px) {
+  .header__register {
+		font-size: 10px;
+  }
+}
+
+.header__login {
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 12px;
+	height: 32px;
+	width: 76px;
+	background-color: rgba(61, 220, 132, 1);
+	color: rgba(0, 0, 0, 1);
+	margin: 21px 70px 0 30px;
+	border-radius: 3px;
+	vertical-align: middle;
+	text-align: center;
+	line-height: 32px;
+}
+
+.header__login {
+	opacity: .8;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .header__login {
+    margin-right: 30px; 
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .header__login {
+		font-size: 10px;
+		margin: 24px 14px 0 14px;
+		height: 26px;
+		width: 54px;
+		line-height: 26px;
+  }
+}
