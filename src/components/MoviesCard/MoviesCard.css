@@ -19,8 +19,6 @@
   height: 151px;
   object-fit: cover;
   box-sizing: border-box;
-  /*заглушка*/
-  /*background-image: url("../../images/pic__COLOR_pic.png");*/
 }
 
 @media screen and (max-width: 1160px) {

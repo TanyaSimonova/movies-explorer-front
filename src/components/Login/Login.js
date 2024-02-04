@@ -1,26 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
+import { useForm } from "../../hooks/useForm";
 
-export const Login = () => {
-  const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
+export const Login = ({ onLogin, errorLogin }) => {
+  const form = useForm();
 
   function handleRegister(e) {
     e.preventDefault();
-
-    setFormValue({ email: "", password: "" });
+    onLogin(form.values);
   }
 
   return (
@@ -36,12 +24,17 @@ export const Login = () => {
               type="email"
               id="email"
               name="email"
-              value={formValue.email}
-              onChange={handleChange}
+              value={form.values.email}
+              onChange={form.handleChange}
               placeholder=""
+              pattern="^\S+@\S+\.\S+$"
               required
             />
-            <span className="login__error">Что-то пошло не так...</span>
+            {
+              (form.isValid = "false" && (
+                <span className="login__error">{form.errors.email}</span>
+              ))
+            }
           </label>
           <label className="login__label" htmlFor="password">
             Пароль
@@ -50,24 +43,31 @@ export const Login = () => {
               type="password"
               id="password"
               name="password"
-              value={formValue.password}
-              onChange={handleChange}
+              value={form.values.password}
+              onChange={form.handleChange}
               placeholder=""
               minLength={5}
               maxLength={15}
               required
             />
-            <span className="login__error">Что-то пошло не так...</span>
+            {
+              (form.isValid = "false" && (
+                <span className="login__error">{form.errors.password}</span>
+              ))
+            }
           </label>
+          <span on className="login__submit-error error">
+            {errorLogin}
+          </span>
+          <button
+            className="login__submit-btn submit-btn"
+            type="submit"
+            aria-label="войти"
+            disabled={!form.disabled}
+          >
+            Войти
+          </button>
         </form>
-        <button
-          className="login__submit-btn"
-          type="submit"
-          aria-label="войти"
-          onSubmit={handleRegister}
-        >
-          Войти
-        </button>
         <Link to="/signup" className="login__signup-btn">
           Ещё не зарегистрированы?{" "}
         </Link>

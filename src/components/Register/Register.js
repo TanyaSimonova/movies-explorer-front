@@ -1,25 +1,16 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { Link } from "react-router-dom";
 import "./Register.css";
+import { useForm } from "../../hooks/useForm";
+import { Tooltip } from "react-tooltip";
 
-export const Register = () => {
-  const [formValue, setFormValue] = useState({
-    firstname: "",
-    email: "",
-    password: "",
-  });
+export const Register = ({ onRegister, errorRegister }) => {
+  const form = useForm();
+  const [openTooltip, setOpenTooltip] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
-
-  function handleRegister(e) {
+  function handleSubmit(e) {
     e.preventDefault();
+    onRegister(form.values);
   }
 
   return (
@@ -27,24 +18,38 @@ export const Register = () => {
       <div className="register__container">
         <Link to="/" className="register__logo"></Link>
         <h2 className="register__title">Добро пожаловать!</h2>
-        <form className="register__form" onSubmit={handleRegister}>
-          <label className="register__label" htmlFor="name">
+        <form className="register__form" onSubmit={handleSubmit}>
+          <label className="register__label" htmlFor="username">
             Имя
             <input
               className="register__input"
               type="text"
-              id="name"
-              name="name"
-              value={formValue.name}
-              onChange={handleChange}
+              id="username"
+              name="username"
               placeholder=""
+              value={form.values.username}
+              onChange={form.handleChange}
               minLength={2}
               maxLength={30}
+              pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{2,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
+              //title="имя может содержать кириллицу и латиницу, допускается дефис и пробел"
               required
+              onInput={() => setOpenTooltip(true)}
             />
-            <span className="register__error">
-              Имя не может содержать меньше двух букв
-            </span>
+            {
+              (form.isValid = "false" && (
+                <span className="register__error">{form.errors.username}</span>
+              ))
+            }
+            <Tooltip
+              offset="15"
+              hidden={openTooltip}
+              anchorSelect="#username"
+              place="top"
+            >
+              Имя может содержать кириллицу и латиницу, допускается дефис и
+              пробел
+            </Tooltip>
           </label>
           <label className="register__label" htmlFor="email">
             E-mail
@@ -53,12 +58,17 @@ export const Register = () => {
               type="email"
               id="email"
               name="email"
-              value={formValue.email}
-              onChange={handleChange}
+              value={form.values.email}
+              onChange={form.handleChange}
               placeholder=""
+              pattern="^\S+@\S+\.\S+$"
               required
             />
-            <span className="register__error">Что-то пошло не так...</span>
+            {
+              (form.isValid = "false" && (
+                <span className="register__error">{form.errors.email}</span>
+              ))
+            }
           </label>
           <label className="register__label" htmlFor="password">
             Пароль
@@ -67,24 +77,29 @@ export const Register = () => {
               type="password"
               id="password"
               name="password"
-              value={formValue.password}
-              onChange={handleChange}
+              value={form.values.password}
+              onChange={form.handleChange}
               placeholder=""
               minLength={5}
               maxLength={15}
               required
             />
-            <span className="register__error">Что-то пошло не так...</span>
+            {
+              (form.isValid = "false" && (
+                <span className="register__error">{form.errors.password}</span>
+              ))
+            }
           </label>
+          <span className="register__submit-error error">{errorRegister}</span>
+          <button
+            type="submit"
+            className="register__submit-btn submit-btn"
+            aria-label="зарегистрироваться"
+            disabled={!form.disabled}
+          >
+            Зарегистрироваться
+          </button>
         </form>
-        <button
-          className="register__submit-btn"
-          type="submit"
-          aria-label="зарегистрироваться"
-          onSubmit={handleRegister}
-        >
-          Зарегистрироваться
-        </button>
         <Link to="/signin" className="register__login-btn">
           Уже зарегистрированы?{" "}
         </Link>
