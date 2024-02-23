@@ -8,7 +8,7 @@ class Api {
     if (res.ok) {
       return res.json();
     }
-     return Promise.reject(res.status);
+    return Promise.reject(res.status);
   }
 
   getItems = () => {
@@ -16,10 +16,9 @@ class Api {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-      }
-    })
-    .then(this._chekValidity);
-  }
+      },
+    }).then(this._chekValidity);
+  };
 }
 
 const api = new Api({
@@ -27,8 +26,8 @@ const api = new Api({
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
-    authorization: `Bearer ${localStorage.getItem('token')}`
-  }
+    authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
 });
 
 export default api;

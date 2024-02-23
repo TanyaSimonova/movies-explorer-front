@@ -12,6 +12,11 @@
   position: relative;
 }
 
+.movies__card:hover .movies__delete-btn {
+  opacity: .8;
+  transition: opacity .3s;
+}
+
 .movies__image {
   grid-area: image;
   grid-column: span 2;
@@ -94,6 +99,12 @@
 .movies__delete-btn:hover {
   opacity: .8;
 	cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  .movies__delete-btn {
+    opacity: .8;
+  }
 }
 
 .movies__underline {

@@ -205,3 +205,11 @@
 .profile__submit-error {
   margin-top: 189px;
 }
+
+.profile__submit-success {
+  height: 14px;
+  font-weight: 500;
+	font-size: 14px;
+  line-height: 1.2;
+  color: rgba(66, 133, 244, 1);
+}

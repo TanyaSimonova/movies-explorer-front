@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
+import { MovieDuration } from "../../utils/constants";
 
 const MoviesCard = ({ movie, onMovieLike, onMovieDelete, savedMovies }) => {
   const [active, setActive] = useState({});
@@ -16,17 +17,15 @@ const MoviesCard = ({ movie, onMovieLike, onMovieDelete, savedMovies }) => {
         setActive(false);
       }
     }
-  }, []);
+  }, [movie, savedMovies]);
 
   const toggleClick = (e) => {
     const isLikedCard = savedMovies.find((m) => m.movieId === movie.id);
     if (isLikedCard) {
       onMovieLike(movie);
-      setActive((prev) => !prev);
     }
     if (!isLikedCard) {
       onMovieLike(movie);
-      setActive((prev) => !prev);
     }
   };
 
@@ -71,9 +70,7 @@ const MoviesCard = ({ movie, onMovieLike, onMovieDelete, savedMovies }) => {
           type="button"
         />
         <span className="movies__underline" />
-        <div className="movies__timer">
-          {Math.floor(movie.duration / 60)}ч {movie.duration % 60}м
-        </div>
+        <div className="movies__timer">{MovieDuration(movie)}</div>
       </li>
     </>
   );

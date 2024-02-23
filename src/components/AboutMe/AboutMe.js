@@ -1,7 +1,7 @@
 import React from "react";
 import "./AboutMe.css";
 import photo from "../../images/my_photo.jpg";
-import { aboutMe, aboutVitaliy } from "../../utils/constants";
+import { AboutMeInfo, AboutVitaliy } from "../../utils/constants";
 
 const AboutMe = () => {
   //чтобы проверить текст макета
@@ -15,7 +15,7 @@ const AboutMe = () => {
           <div className="about-me__description">
             <h3 className="about-me__subtitle">Татьяна</h3>
             <p className="about-me__text">Фронтенд-разработчик</p>
-            <p className="about-me__text">{aboutMe}</p>
+            <p className="about-me__text">{AboutMeInfo}</p>
             <a
               className="about-me__link"
               href="https://github.com/TanyaSimonova"

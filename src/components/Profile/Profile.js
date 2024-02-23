@@ -1,43 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Profile.css";
+import { useForm } from "../../hooks/useForm";
 
-export default function Profile({ currentUser, onUpdateUser, errorProfile, onLoggedIn }) {
+export default function Profile({
+  currentUser,
+  onUpdateUser,
+  errorProfile,
+  successProfile,
+  onLoggedIn,
+}) {
   const [validChange, setValidChange] = useState(false);
   const [isShowEdit, setIsShowEdit] = useState(true);
   const [isShowSubmit, setIsShowSubmit] = useState(false);
   const [disabledInput, setDisabledInput] = useState(false);
   const [disabledEditBtn, setDisabledEditBtn] = useState(true);
-  const [values, setValues] = useState({
-    username: currentUser.name,
-    email: currentUser.email,
-  });
-  const [errors, setErrors] = useState({});
-  const [isValid, setIsValid] = useState(false);
-  const [disabled, setDisabled] = useState(true);
+  const [submitError, setSubmitError] = useState(errorProfile);
+  const [submitSuccess, setSubmitSuccess] = useState(successProfile);
+  const { isValid, values, handleChange, errors, resetForm } = useForm();
 
-  const handleChange = (event) => {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: target.validationMessage });
-    setIsValid(target.closest("form").checkValidity());
-    setDisabled(target.form.checkValidity());
-  };
+  useEffect(() => {
+    if (errorProfile) {
+      setSubmitError(errorProfile);
+    }
+    if (successProfile) {
+      setSubmitSuccess(successProfile);
+    }
+  }, [successProfile, errorProfile]);
 
   useEffect(() => {
     if (
-      values.username !== currentUser.name ||
-      values.email !== currentUser.email
+      (values.name !== undefined && values.name !== currentUser.name) ||
+      (values.email !== undefined && values.email !== currentUser.email)
     ) {
       setValidChange(true);
-      console.log("Valid DATA");
     } else {
       setValidChange(false);
     }
   }, [
-    values.username,
+    values.name,
     values.email,
     validChange,
     currentUser.name,
@@ -45,12 +46,12 @@ export default function Profile({ currentUser, onUpdateUser, errorProfile, onLog
   ]);
 
   useEffect(() => {
-    if (validChange && disabled) {
+    if (validChange && isValid) {
       setDisabledEditBtn(false);
     } else {
       setDisabledEditBtn(true);
     }
-  }, [disabled, validChange]);
+  }, [isValid, validChange]);
 
   function handleSubmitChange() {
     setIsShowSubmit(true);
@@ -61,6 +62,12 @@ export default function Profile({ currentUser, onUpdateUser, errorProfile, onLog
   function handleChangeProfile(e) {
     e.preventDefault();
     onUpdateUser(values);
+    resetForm();
+  }
+
+  function handleResetMessage(e) {
+    setSubmitError(null);
+    setSubmitSuccess(null);
   }
 
   function handleLogOut(e) {
@@ -70,28 +77,25 @@ export default function Profile({ currentUser, onUpdateUser, errorProfile, onLog
 
   return (
     <section className="profile">
-      <h2 className="profile__title">
-        Привет, {currentUser.name || currentUser.username}!
-      </h2>
-      <form className="profile__form" onSubmit={handleChangeProfile}>
-        <label className="profile__label" htmlFor="username">
+      <h2 className="profile__title">Привет, {currentUser.name}!</h2>
+      <form className="profile__form" onSubmit={handleChangeProfile} noValidate>
+        <label className="profile__label" htmlFor="name">
           Имя
           <input
             className="profile__input"
             type="text"
-            id="username"
-            name="username"
-            defaultValue={currentUser.name || currentUser.username}
-            value={values.username || currentUser.username}
+            id="name"
+            name="name"
+            defaultValue={currentUser.name}
+            value={values?.name || currentUser.name}
             onChange={(e) => handleChange(e)}
+            onInput={handleResetMessage}
             minLength={2}
             maxLength={30}
-            pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{2,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
-            required
-            disabled={disabledInput}
+            pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{1,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
           />
         </label>
-        {!isValid && <span className="profile__error">{errors.username}</span>}
+        {errors.name && <span className="profile__error">{errors.name}</span>}
         <label className="profile__label" htmlFor="email">
           E-mail
           <input
@@ -99,14 +103,15 @@ export default function Profile({ currentUser, onUpdateUser, errorProfile, onLog
             type="email"
             id="email"
             name="email"
-            value={values.email}
+            value={values.email || currentUser.email}
             onChange={(e) => handleChange(e)}
+            onInput={handleResetMessage}
             pattern="^\S+@\S+\.\S+$"
             required
             disabled={disabledInput}
           />
         </label>
-        {!isValid && (
+        {errors.email && (
           <span className="profile__error validity">{errors.email}</span>
         )}
         {isShowEdit && (
@@ -120,23 +125,20 @@ export default function Profile({ currentUser, onUpdateUser, errorProfile, onLog
             >
               Редактировать
             </button>
-            <Link
-              onClick={handleLogOut}
-              to="/signin"
-              className="profile__exit-btn"
-            >
+            <Link onClick={handleLogOut} to="/" className="profile__exit-btn">
               Выйти из аккаунта
             </Link>
           </>
         )}
         {isShowSubmit && (
           <>
-            <span className="profile__submit-error error">{errorProfile}</span>
+            <span className="profile__submit-error error">{submitError}</span>
+            <span className="profile__submit-success">{submitSuccess}</span>
             <button
               className="profile__submit-btn submit-btn"
               type="submit"
               aria-label="сохранить изменения"
-              disabled={!disabled}
+              disabled={!isValid}
             >
               Сохранить
             </button>

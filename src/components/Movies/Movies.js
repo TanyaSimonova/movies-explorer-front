@@ -9,11 +9,12 @@ const Movies = ({
   movies,
   onMovieLike,
   savedMovies,
+  loading,
 }) => {
-  const [serchListener, setSearchListener] = useState(false);
+  const [serchListener, setSearchListener] = useState("");
 
-  const handleSearchListener = (e) => {
-    setSearchListener(true);
+  const handleSearchListener = (boolean) => {
+    setSearchListener(boolean);
   };
 
   const handleSearchFilm = (e) => {
@@ -29,11 +30,13 @@ const Movies = ({
       <SearchForm
         onSearch={handleSearchFilm}
         onSearchListener={handleSearchListener}
+        movies={movies}
       />
       {errorLoadingMovies ? (
         <span className="movies-main__error-load">{errorLoadingMovies}</span>
       ) : (
         <MoviesCardList
+          loading={loading}
           movies={movies}
           onMovieLike={handleMovieLike}
           serchListener={serchListener}

@@ -1,16 +1,14 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Register.css";
 import { useForm } from "../../hooks/useForm";
-import { Tooltip } from "react-tooltip";
 
 export const Register = ({ onRegister, errorRegister }) => {
-  const form = useForm();
-  const [openTooltip, setOpenTooltip] = useState(false);
+  const { isValid, values, handleChange, errors } = useForm();
 
   function handleSubmit(e) {
     e.preventDefault();
-    onRegister(form.values);
+    onRegister(values);
   }
 
   return (
@@ -18,38 +16,23 @@ export const Register = ({ onRegister, errorRegister }) => {
       <div className="register__container">
         <Link to="/" className="register__logo"></Link>
         <h2 className="register__title">Добро пожаловать!</h2>
-        <form className="register__form" onSubmit={handleSubmit}>
-          <label className="register__label" htmlFor="username">
+        <form className="register__form" onSubmit={handleSubmit} noValidate>
+          <label className="register__label" htmlFor="name">
             Имя
             <input
               className="register__input"
               type="text"
-              id="username"
-              name="username"
+              id="name"
+              name="name"
               placeholder=""
-              value={form.values.username}
-              onChange={form.handleChange}
+              value={values.name}
+              onChange={handleChange}
               minLength={2}
               maxLength={30}
-              pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{2,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
-              //title="имя может содержать кириллицу и латиницу, допускается дефис и пробел"
+              pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{1,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
               required
-              onInput={() => setOpenTooltip(true)}
             />
-            {
-              (form.isValid = "false" && (
-                <span className="register__error">{form.errors.username}</span>
-              ))
-            }
-            <Tooltip
-              offset="15"
-              hidden={openTooltip}
-              anchorSelect="#username"
-              place="top"
-            >
-              Имя может содержать кириллицу и латиницу, допускается дефис и
-              пробел
-            </Tooltip>
+            {!isValid && <span className="register__error">{errors.name}</span>}
           </label>
           <label className="register__label" htmlFor="email">
             E-mail
@@ -58,17 +41,15 @@ export const Register = ({ onRegister, errorRegister }) => {
               type="email"
               id="email"
               name="email"
-              value={form.values.email}
-              onChange={form.handleChange}
+              value={values.email}
+              onChange={handleChange}
               placeholder=""
               pattern="^\S+@\S+\.\S+$"
               required
             />
-            {
-              (form.isValid = "false" && (
-                <span className="register__error">{form.errors.email}</span>
-              ))
-            }
+            {!isValid && (
+              <span className="register__error">{errors.email}</span>
+            )}
           </label>
           <label className="register__label" htmlFor="password">
             Пароль
@@ -77,25 +58,23 @@ export const Register = ({ onRegister, errorRegister }) => {
               type="password"
               id="password"
               name="password"
-              value={form.values.password}
-              onChange={form.handleChange}
+              value={values.password}
+              onChange={handleChange}
               placeholder=""
               minLength={5}
               maxLength={15}
               required
             />
-            {
-              (form.isValid = "false" && (
-                <span className="register__error">{form.errors.password}</span>
-              ))
-            }
+            {!isValid && (
+              <span className="register__error">{errors.password}</span>
+            )}
           </label>
           <span className="register__submit-error error">{errorRegister}</span>
           <button
             type="submit"
             className="register__submit-btn submit-btn"
             aria-label="зарегистрироваться"
-            disabled={!form.disabled}
+            disabled={!isValid}
           >
             Зарегистрироваться
           </button>

@@ -6,7 +6,13 @@ import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import { Register } from "../Register/Register";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import { Login } from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
 import Preloader from "../Preloader/Preloader.js";
@@ -14,7 +20,15 @@ import { CurrentUserContext } from "../../context/CurrentUserContext.js";
 import * as auth from "../../utils/MainApi.js";
 import api from "../../utils/MoviesApi.js";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute.js";
-import { duplicate, register, server, login, profile, loadingFilm } from "../../utils/constants.js";
+import {
+  DuplicateError,
+  RegisterError,
+  ServerError,
+  LoginError,
+  ProfileError,
+  LoadingFilmError,
+  LoadingProfileSuccess,
+} from "../../utils/constants.js";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("token"));
@@ -25,6 +39,7 @@ function App() {
   const [errorRegister, setErrorRegister] = useState(null);
   const [errorLogin, setErrorLogin] = useState(null);
   const [errorProfile, setErrorProfile] = useState(null);
+  const [successProfile, setSuccessProfile] = useState(null);
   const [errorLoadingMovies, setErrorLoadingMovies] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,7 +64,6 @@ function App() {
         .checkToken(jwt)
         .then((res) => {
           setCurrentUser(res);
-          navigate("/", { replace: true });
         })
         .catch((error) => {
           console.log(`Ошибка при проверке токена ${error}`);
@@ -80,7 +94,6 @@ function App() {
     auth
       .register(formValue)
       .then((res) => {
-        console.log(res);
         setCurrentUser(formValue);
         setLoggedIn(true);
         setLoading(false);
@@ -88,14 +101,11 @@ function App() {
         handleLogin(formValue);
       })
       .catch((error) => {
-        if (error === 400)
-          setErrorRegister(register);
-        if (error === 409)
-          setErrorRegister(duplicate);
+        if (error === 400) setErrorRegister(RegisterError);
+        if (error === 409) setErrorRegister(DuplicateError);
 
-        if (error === 500)
-          setErrorRegister(server);
-          setLoading(false);
+        if (error === 500) setErrorRegister(ServerError);
+        setLoading(false);
       });
   };
 
@@ -113,37 +123,33 @@ function App() {
         }
       })
       .catch((error) => {
-        if (error === 401)
-          setErrorLogin(login);
+        if (error === 401) setErrorLogin(LoginError);
 
-        if (error === 500)
-          setErrorLogin(server);
-          setLoading(false);
+        if (error === 500) setErrorLogin(ServerError);
+        setLoading(false);
       });
   };
 
   const handleProfile = (formValue) => {
     setErrorProfile(null);
+    setSuccessProfile(null);
     setLoading(true);
     auth
       .setUserUpdate(formValue)
       .then((res) => {
-        setCurrentUser(formValue);
+        setCurrentUser(res.user);
         setLoading(false);
-        navigate("/movies", { replace: true });
+        setSuccessProfile(LoadingProfileSuccess);
       })
       .catch((error) => {
-        if (error === 409)
-          setErrorProfile(duplicate);
-        if (error === 400)
-          setErrorProfile(profile);
-        if (error === 500)
-          setErrorProfile(server);
-          setLoading(false);
+        if (error === 409) setErrorProfile(DuplicateError);
+        if (error === 400) setErrorProfile(ProfileError);
+        if (error === 500) setErrorProfile(ServerError);
+        setLoading(false);
       });
   };
 
-  function handleSearchFilm(e) {
+  function handleSearchFilm() {
     setErrorLoadingMovies(null);
     setLoading(true);
     api
@@ -153,7 +159,7 @@ function App() {
         setMovies(res);
       })
       .catch((error) => {
-        setErrorLoadingMovies(loadingFilm);
+        setErrorLoadingMovies(LoadingFilmError);
         console.log(`Ошибка при загрузке данных фильмов ${error}`);
         setLoading(false);
       });
@@ -203,22 +209,35 @@ function App() {
           <Route
             path="/signup"
             element={
-              <>
-                <Register
-                  onRegister={handleRegister}
-                  errorRegister={errorRegister}
-                />
-                {loading && <Preloader />}
-              </>
+              !loggedIn ? (
+                <>
+                  <Register
+                    onRegister={handleRegister}
+                    errorRegister={errorRegister}
+                    loggedIn={loggedIn}
+                  />
+                  {loading && <Preloader />}
+                </>
+              ) : (
+                <Navigate replace to="/" />
+              )
             }
           />
           <Route
             path="/signin"
             element={
-              <>
-                <Login onLogin={handleLogin} errorLogin={errorLogin} />
-                {loading && <Preloader />}
-              </>
+              !loggedIn ? (
+                <>
+                  <Login
+                    onLogin={handleLogin}
+                    errorLogin={errorLogin}
+                    loggedIn={loggedIn}
+                  />
+                  {loading && <Preloader />}
+                </>
+              ) : (
+                <Navigate replace to="/" />
+              )
             }
           />
           <Route
@@ -237,6 +256,7 @@ function App() {
               <ProtectedRouteElement loggedIn={loggedIn}>
                 <Header loggedIn={loggedIn} />
                 <Movies
+                  loading={loading}
                   onSearch={handleSearchFilm}
                   savedMovies={savedMovies}
                   errorLoadingMovies={errorLoadingMovies}
@@ -271,6 +291,7 @@ function App() {
                   onUpdateUser={handleProfile}
                   errorProfile={errorProfile}
                   onLoggedIn={handleLogOut}
+                  successProfile={successProfile}
                 />
                 {loading && <Preloader />}
               </ProtectedRouteElement>

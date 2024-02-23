@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./SearchForm.css";
 import { useLocation } from "react-router-dom";
 
-const SearchForm = ({ onSearch, onSavedSearch, onSearchListener }) => {
+const SearchForm = ({ onSearch, onSavedSearch, onSearchListener, movies }) => {
   const location = useLocation();
   const isSavedMovies = location.pathname === "/saved-movies";
+  const isMovies = location.pathname === "/movies";
 
-  //стейты для главного поиска
+  //стейты главного поиска
   const [message, setMessage] = useState("");
   const [searchFilm, setSearchFilm] = useState(() => {
     const saved = localStorage.getItem("filmQuery");
@@ -19,9 +20,10 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener }) => {
     return initialValue || false;
   });
 
-  //стейты для сохраненных фильмов
+  //стейты сохраненных фильмов
   const [searchSavedFilm, setSearchSavedFilm] = useState(null);
   const [checkedSavedShorts, setCheckedSavedShorts] = useState(false);
+  const [messageSaved, setMessageSaved] = useState("");
 
   //эффекты и ручки для главного поиска
   useEffect(() => {
@@ -34,19 +36,60 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener }) => {
     setSearchFilm(e.target.value);
   }
 
+  const handleCheckShorts = (e) => {
+    setChecked((prev) => !prev);
+    onSearchListener(true);
+  };
+
+  useEffect(() => {
+    if (isMovies && movies.length === 0) {
+      onSearch(true);
+      onSearchListener(false);
+    }
+  }, [isMovies, movies]);
+
+  useEffect(() => {
+    if (isMovies && searchFilm.length > 0 && (checked || !checked)) {
+      onSearchListener("");
+    }
+  }, [searchFilm, checked, onSearchListener]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchFilm.length === 0) {
       setMessage("Нужно ввести ключевое слово");
+      onSearchListener(false);
     }
-    onSearch();
-    onSearchListener();
+    if (searchFilm.length > 0) {
+      onSearchListener(true);
+    }
   };
 
-  //сабмит для сохраненных фильмов
   const handleSavedFilmSubmit = (e) => {
     e.preventDefault();
-    onSavedSearch({ searchSavedFilm, checkedSavedShorts });
+    if (searchSavedFilm === null || searchSavedFilm.length === 0) {
+      setMessageSaved("Нужно ввести ключевое слово");
+    } else {
+      onSavedSearch({ searchSavedFilm, checkedSavedShorts });
+      setMessageSaved("");
+    }
+  };
+
+  useEffect(() => {
+    if (isSavedMovies && checkedSavedShorts) {
+      onSavedSearch({ searchSavedFilm, checkedSavedShorts });
+    }
+    if (isSavedMovies && !checkedSavedShorts) {
+      onSavedSearch({ searchSavedFilm, checkedSavedShorts });
+    }
+  }, [checkedSavedShorts]);
+
+  const handleCheckSavedShorts = (e) => {
+    setCheckedSavedShorts((prev) => !prev);
+  };
+
+  const handleChangeSavedFilm = (e) => {
+    setSearchSavedFilm(e.target.value);
   };
 
   return isSavedMovies ? (
@@ -62,7 +105,7 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener }) => {
               type="search"
               name="search"
               placeholder="Фильм"
-              onChange={(e) => setSearchSavedFilm(e.target.value)}
+              onChange={handleChangeSavedFilm}
               value={searchSavedFilm}
             />
             <button
@@ -80,13 +123,14 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener }) => {
               id="shorts"
               defaultValue={false}
               checked={checkedSavedShorts}
-              onClick={() => setCheckedSavedShorts((prev) => !prev)}
+              onChange={handleCheckSavedShorts}
               className="search-form__checkbox_invisible"
             />
             <span className="search-form__checkbox_visible" />
             <span className="search-form__tip">Короткометражки</span>
           </label>
         </form>
+        <span className="search-form__error error">{messageSaved}</span>
         <div className="search-form__underline"></div>
       </section>
     </>
@@ -118,7 +162,7 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener }) => {
               id="shorts"
               defaultValue={false}
               checked={checked}
-              onClick={() => setChecked((prev) => !prev)}
+              onChange={handleCheckShorts}
               className="search-form__checkbox_invisible"
             />
             <span className="search-form__checkbox_visible" />

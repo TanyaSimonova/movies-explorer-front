@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import {
-  breakpointS,
-  breakpointM,
-  breakpointL,
-  breakpointXL,
+  BreakpointS,
+  BreakpointM,
+  BreakpointL,
+  BreakpointXL,
 } from "../utils/constants";
 
 export const useResize = () => {
@@ -26,9 +26,9 @@ export const useResize = () => {
 
   return {
     width,
-    isScreenS: width >= breakpointS,
-    isScreenM: width >= breakpointM,
-    isScreenL: width >= breakpointL,
-    isScreenXl: width >= breakpointXL,
+    isScreenS: width >= BreakpointS,
+    isScreenM: width >= BreakpointM,
+    isScreenL: width >= BreakpointL,
+    isScreenXl: width >= BreakpointXL,
   };
 };

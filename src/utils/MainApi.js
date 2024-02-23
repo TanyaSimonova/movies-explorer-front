@@ -1,11 +1,12 @@
-export const BASE_URL = "https://api.movies-explorer.pnk.nomoredomainsmonster.ru";
+export const BASE_URL =
+  "https://api.movies-explorer.pnk.nomoredomainsmonster.ru";
 
 const chekValidity = (res) => {
   if (res.ok) {
     return res.json();
   }
   return Promise.reject(res.status);
-}
+};
 
 export const register = (data) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -17,7 +18,7 @@ export const register = (data) => {
     body: JSON.stringify({
       email: data.email,
       password: data.password,
-      name: data.username,
+      name: data.name,
     }),
   }).then(chekValidity);
 };
@@ -56,27 +57,26 @@ export const checkToken = (token) => {
 
 export const setUserUpdate = (data) => {
   return fetch(`${BASE_URL}/users/me`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify({
-      name: data.username,
+      name: data.name,
       email: data.email,
-    })
-  })
-  .then(chekValidity);
-}
+    }),
+  }).then(chekValidity);
+};
 
 export const saveMovie = (data) => {
   return fetch(`${BASE_URL}/movies`, {
-    method: 'POST',
+    method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify({
       country: data.country,
@@ -90,42 +90,37 @@ export const saveMovie = (data) => {
       nameRU: data.nameRU,
       nameEN: data.nameEN,
       movieId: data.id,
-    })
-  })
-  .then(chekValidity);
-}
+    }),
+  }).then(chekValidity);
+};
 
 export const getItems = () => {
   return fetch(`${BASE_URL}/movies`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-  })
-  .then(chekValidity);
-}
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then(chekValidity);
+};
 
 export const getUser = () => {
   return fetch(`${BASE_URL}/users/me`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-  })
-  .then(chekValidity);
-}
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then(chekValidity);
+};
 
 export const deleteMovie = (cardId) => {
   return fetch(`${BASE_URL}/movies/${cardId}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      authorization: `Bearer ${localStorage.getItem('token')}`
-    }
- })
-  .then(chekValidity);
-}
-
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then(chekValidity);
+};

@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import { useLocation } from "react-router-dom";
 import { useResize } from "../../hooks/useResize";
+import {
+  NumberMoviesForXL,
+  NumberMoviesForL,
+  NumberMoviesForM,
+  NumberMoviesForS,
+  AddNumberMoviesForXL,
+  AddNumberMoviesForL,
+  AddNumberMoviesForM,
+  AddNumberMoviesForS,
+} from "../../utils/constants";
 
 const MoviesCardList = ({
   movies,
   onMovieLike,
   serchListener,
   savedMovies,
+  loading,
 }) => {
-  const location = useLocation();
-  const isSavedMovies = location.pathname === "/saved-movies";
   const size = useResize();
   const [numberMovies, setNumberMovies] = useState(null);
   const [isVisibleBtn, setIsVisibleBtn] = useState(true);
@@ -34,7 +42,6 @@ const MoviesCardList = ({
   const handleMovieLike = (movie) => {
     onMovieLike(movie);
   };
-
 
   function handleSearchMovies(movies) {
     const query = JSON.parse(localStorage.getItem("filmQuery"));
@@ -60,16 +67,19 @@ const MoviesCardList = ({
             item.duration <= 40),
       );
     }
-    if (query === "" && shorts === "") {
+    if (query === "") {
       return movies;
     }
   }
 
-  //запись результатов поиска в локальное хранилище
   useEffect(() => {
-    if (serchListener) {
+    if (serchListener === true) {
       setCountMovies(handleSearchMovies(movies));
       setSearchFilmData(handleSearchMovies(movies));
+    }
+    if (serchListener === false) {
+      setCountMovies([]);
+      setNumberMovies(0);
     }
   }, [serchListener, movies]);
 
@@ -77,7 +87,8 @@ const MoviesCardList = ({
     if (
       loadStorageFilm === 0 ||
       (loadStorageFilm !== 0 && loadStorageFilm <= numberMovies) ||
-      (searchedFilm !== 0 && searchedFilm <= numberMovies)
+      (searchedFilm !== 0 && searchedFilm <= numberMovies) ||
+      serchListener === false
     ) {
       setIsVisibleBtn(false);
     } else if (loadStorageFilm > numberMovies || searchedFilm > numberMovies) {
@@ -108,69 +119,65 @@ const MoviesCardList = ({
   //рендер запроса
   const mapMoviesSearch = (numberMovies) => (
     <ul className="movies__list">
-      {movies === undefined || movies.length === 0 ? (
-        <span></span>
-      ) : (
-        handleSearchMovies(movies)
-          .slice(0, numberMovies)
-          .map((movie) => (
-            <MoviesCard
-              key={movie._id}
-              movie={movie}
-              onMovieLike={handleMovieLike}
-              savedMovies={savedMovies}
-            />
-          ))
-      )}
+      {serchListener === false || serchListener === ""
+        ? ""
+        : handleSearchMovies(movies)
+            .slice(0, numberMovies)
+            .map((movie) => (
+              <MoviesCard
+                key={movie._id}
+                movie={movie}
+                onMovieLike={handleMovieLike}
+                savedMovies={savedMovies}
+              />
+            ))}
     </ul>
   );
 
   //отрисовываем кол-во фильмов на странице
   useEffect(() => {
     if (size.isScreenXl) {
-      setNumberMovies(16);
+      setNumberMovies(NumberMoviesForXL);
     }
     if (!size.isScreenXl && size.isScreenL) {
-      setNumberMovies(12);
+      setNumberMovies(NumberMoviesForL);
     }
     if (!size.isScreenL && size.isScreenM) {
-      setNumberMovies(8);
+      setNumberMovies(NumberMoviesForM);
     }
     if (!size.isScreenM) {
-      setNumberMovies(5);
+      setNumberMovies(NumberMoviesForS);
     }
-  }, [size.isScreenXl, size.isScreenL, size.isScreenM]);
+  }, [size.isScreenXl, size.isScreenL, size.isScreenM, serchListener]);
 
   //добавляем фильмы по клику на кнопку
   const handleClick = (e) => {
     if (size.isScreenXl) {
-      setNumberMovies((prev) => prev + 4);
+      setNumberMovies((prev) => prev + AddNumberMoviesForXL);
     }
     if (!size.isScreenXl && size.isScreenL) {
-      setNumberMovies((prev) => prev + 3);
+      setNumberMovies((prev) => prev + AddNumberMoviesForL);
     }
     if (!size.isScreenL && size.isScreenM) {
-      setNumberMovies((prev) => prev + 2);
+      setNumberMovies((prev) => prev + AddNumberMoviesForM);
     }
     if (!size.isScreenM) {
-      setNumberMovies((prev) => prev + 2);
+      setNumberMovies((prev) => prev + AddNumberMoviesForS);
     }
   };
 
   return (
     <section className="movies">
-      {serchListener && searchedFilm === 0 ? (
+      {!loading && serchListener === true && searchedFilm === 0 ? (
         <span className="movies__empty">Ничего не найдено</span>
       ) : (
         <>
-          {searchFilmData
+          {searchFilmData.length > 0
             ? mapMoviesLoad(numberMovies)
             : mapMoviesSearch(numberMovies)}
           {isVisibleBtn && (
             <button
-              className={`movies__button ${
-                isSavedMovies ? "movies__button_hide" : ""
-              }`}
+              className="movies__button"
               aria-label="добавить ещё фильмов"
               type="button"
               onClick={() => handleClick()}
@@ -184,4 +191,3 @@ const MoviesCardList = ({
   );
 };
 export default MoviesCardList;
-

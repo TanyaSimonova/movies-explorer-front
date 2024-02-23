@@ -4,11 +4,11 @@ import "./Login.css";
 import { useForm } from "../../hooks/useForm";
 
 export const Login = ({ onLogin, errorLogin }) => {
-  const form = useForm();
+  const { isValid, values, handleChange, errors } = useForm();
 
   function handleRegister(e) {
     e.preventDefault();
-    onLogin(form.values);
+    onLogin(values);
   }
 
   return (
@@ -16,7 +16,7 @@ export const Login = ({ onLogin, errorLogin }) => {
       <div className="login__container">
         <Link to="/" className="login__logo"></Link>
         <h2 className="login__title">Рады видеть!</h2>
-        <form className="login__form" onSubmit={handleRegister}>
+        <form className="login__form" onSubmit={handleRegister} noValidate>
           <label className="login__label" htmlFor="email">
             E-mail
             <input
@@ -24,17 +24,13 @@ export const Login = ({ onLogin, errorLogin }) => {
               type="email"
               id="email"
               name="email"
-              value={form.values.email}
-              onChange={form.handleChange}
+              value={values.email}
+              onChange={handleChange}
               placeholder=""
               pattern="^\S+@\S+\.\S+$"
               required
             />
-            {
-              (form.isValid = "false" && (
-                <span className="login__error">{form.errors.email}</span>
-              ))
-            }
+            {!isValid && <span className="login__error">{errors.email}</span>}
           </label>
           <label className="login__label" htmlFor="password">
             Пароль
@@ -43,18 +39,16 @@ export const Login = ({ onLogin, errorLogin }) => {
               type="password"
               id="password"
               name="password"
-              value={form.values.password}
-              onChange={form.handleChange}
+              value={values.password}
+              onChange={handleChange}
               placeholder=""
               minLength={5}
               maxLength={15}
               required
             />
-            {
-              (form.isValid = "false" && (
-                <span className="login__error">{form.errors.password}</span>
-              ))
-            }
+            {!isValid && (
+              <span className="login__error">{errors.password}</span>
+            )}
           </label>
           <span on className="login__submit-error error">
             {errorLogin}
@@ -63,7 +57,7 @@ export const Login = ({ onLogin, errorLogin }) => {
             className="login__submit-btn submit-btn"
             type="submit"
             aria-label="войти"
-            disabled={!form.disabled}
+            disabled={!isValid}
           >
             Войти
           </button>
