@@ -11,6 +11,7 @@ import {
   AddNumberMoviesForL,
   AddNumberMoviesForM,
   AddNumberMoviesForS,
+  MovieShortDuration
 } from "../../utils/constants";
 
 const MoviesCardList = ({
@@ -33,6 +34,7 @@ const MoviesCardList = ({
   });
   const loadStorageFilm = Object.keys(searchFilmData).length;
   const searchedFilm = Object.keys(countMovies).length;
+  const [messageMovieNotFound, setMessageMovieNotFound] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("filmData", JSON.stringify(searchFilmData));
@@ -61,10 +63,10 @@ const MoviesCardList = ({
         (item) =>
           (item.nameRU != null &&
             item.nameRU.toLowerCase().includes(query.toLowerCase()) &&
-            item.duration <= 40) ||
+            item.duration <= MovieShortDuration) ||
           (item.nameEN != null &&
             item.nameEN.toLowerCase().includes(query.toLowerCase()) &&
-            item.duration <= 40),
+            item.duration <= MovieShortDuration),
       );
     }
     if (query === "") {
@@ -166,9 +168,24 @@ const MoviesCardList = ({
     }
   };
 
+  useEffect(() => {
+    if (!loading && searchedFilm === 0 && (serchListener === true || serchListener === "")) {
+      setMessageMovieNotFound(true);
+    }
+    if (!loading && searchedFilm === 0 && serchListener === false) {
+      setMessageMovieNotFound(false);
+    }
+    if (searchedFilm > 0) {
+      setMessageMovieNotFound(false);
+    }
+    if (loading && searchedFilm === 0 && serchListener === "") {
+      setMessageMovieNotFound(false);
+    }
+  }, [loading, searchedFilm, serchListener])
+
   return (
     <section className="movies">
-      {!loading && serchListener === true && searchedFilm === 0 ? (
+      { messageMovieNotFound ? (
         <span className="movies__empty">Ничего не найдено</span>
       ) : (
         <>

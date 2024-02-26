@@ -19,6 +19,7 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener, movies }) => {
     const initialValue = JSON.parse(saved);
     return initialValue || false;
   });
+  const [loadMovies, setLoadMovies] = useState(false);
 
   //стейты сохраненных фильмов
   const [searchSavedFilm, setSearchSavedFilm] = useState(null);
@@ -39,29 +40,45 @@ const SearchForm = ({ onSearch, onSavedSearch, onSearchListener, movies }) => {
   const handleCheckShorts = (e) => {
     setChecked((prev) => !prev);
     onSearchListener(true);
+    setLoadMovies(true);
   };
 
+  //очистка пропса поиска
   useEffect(() => {
-    if (isMovies && movies.length === 0) {
-      onSearch(true);
-      onSearchListener(false);
-    }
-  }, [isMovies, movies]);
-
-  useEffect(() => {
-    if (isMovies && searchFilm.length > 0 && (checked || !checked)) {
+    if (
+      isMovies &&
+      loadMovies &&
+      movies.length > 0 &&
+      searchFilm.length > 0 &&
+      (checked || !checked)
+    ) {
       onSearchListener("");
     }
-  }, [searchFilm, checked, onSearchListener]);
+    if (
+      isMovies &&
+      !loadMovies &&
+      movies.length > 0 &&
+      searchFilm.length > 0 &&
+      (checked || !checked)
+    ) {
+      onSearchListener(false);
+    }
+  }, [searchFilm, checked, onSearchListener, loadMovies]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!loadMovies && movies.length === 0) {
+      onSearch(true);
+      onSearchListener(true);
+      setLoadMovies(true);
+    }
     if (searchFilm.length === 0) {
       setMessage("Нужно ввести ключевое слово");
       onSearchListener(false);
     }
     if (searchFilm.length > 0) {
       onSearchListener(true);
+      setLoadMovies(true);
     }
   };
 

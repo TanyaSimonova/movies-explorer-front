@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MoviesCardListSaved.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import { MovieShortDuration } from "../../utils/constants";
 
 const MoviesCardListSaved = ({ savedMovies, value, onMovieDelete }) => {
   const [countMovies, setCountMovies] = useState([]);
@@ -37,10 +38,10 @@ const MoviesCardListSaved = ({ savedMovies, value, onMovieDelete }) => {
         (item) =>
           (item.nameRU != null &&
             item.nameRU.toLowerCase().includes(query.toLowerCase()) &&
-            item.duration <= 40) ||
+            item.duration <= MovieShortDuration) ||
           (item.nameEN != null &&
             item.nameEN.toLowerCase().includes(query.toLowerCase()) &&
-            item.duration <= 40),
+            item.duration <= MovieShortDuration),
       );
     }
     if (query === "" && shorts === "") {

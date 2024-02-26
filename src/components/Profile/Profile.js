@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import "./Profile.css";
 import { useForm } from "../../hooks/useForm";
+import { CurrentUserContext } from "../../context/CurrentUserContext";
 
 export default function Profile({
-  currentUser,
   onUpdateUser,
   errorProfile,
   successProfile,
   onLoggedIn,
 }) {
+  const currentUser = useContext(CurrentUserContext);
   const [validChange, setValidChange] = useState(false);
   const [isShowEdit, setIsShowEdit] = useState(true);
   const [isShowSubmit, setIsShowSubmit] = useState(false);
@@ -86,13 +87,13 @@ export default function Profile({
             type="text"
             id="name"
             name="name"
-            defaultValue={currentUser.name}
             value={values?.name || currentUser.name}
             onChange={(e) => handleChange(e)}
             onInput={handleResetMessage}
             minLength={2}
             maxLength={30}
             pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{1,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
+            disabled={disabledInput}
           />
         </label>
         {errors.name && <span className="profile__error">{errors.name}</span>}
@@ -138,7 +139,7 @@ export default function Profile({
               className="profile__submit-btn submit-btn"
               type="submit"
               aria-label="сохранить изменения"
-              disabled={!isValid}
+              disabled={!isValid || disabledEditBtn}
             >
               Сохранить
             </button>

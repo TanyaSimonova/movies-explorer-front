@@ -11,7 +11,7 @@ const Movies = ({
   savedMovies,
   loading,
 }) => {
-  const [serchListener, setSearchListener] = useState("");
+  const [serchListener, setSearchListener] = useState(false);
 
   const handleSearchListener = (boolean) => {
     setSearchListener(boolean);

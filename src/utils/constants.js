@@ -21,4 +21,4 @@ export const AddNumberMoviesForL = 3;
 export const AddNumberMoviesForM = 2;
 export const AddNumberMoviesForS = 2;
 export const MovieDuration = (movie) => [`${Math.floor(movie.duration / 60)}ч ${(movie.duration % 60)}м`];
-
+export const MovieShortDuration = 40;
