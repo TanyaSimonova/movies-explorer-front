@@ -1,5 +1,8 @@
 .movies {
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .movies__list {
@@ -92,5 +95,18 @@
 @media screen and (max-width: 320px) {
   .movies__button_hide {
     margin-bottom: 45px;
+  }
+}
+
+.movies__empty {
+  line-height: 1.5;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 50px auto;
+}
+
+@media screen and (max-width: 768px) {
+  .movies__empty {
+    font-size: 16px;
   }
 }
