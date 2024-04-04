@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "./SavedMovies.css";
 import SearchForm from "../SearchForm/SearchForm";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import MoviesCardListSaved from "../MoviesCardListSaved/MoviesCardListSaved";
 
-const SavedMovies = () => {
+const SavedMovies = ({ savedMovies, onMovieDelete }) => {
+  const [value, setValue] = useState("");
+
+  const handleMovieDelete = (movie) => {
+    onMovieDelete(movie);
+  };
+
+  const handleChange = (value) => {
+    setValue(value);
+  };
+
   return (
     <section className="movies-saved">
-      <SearchForm />
-      <MoviesCardList />
+      <SearchForm onSavedSearch={handleChange} />
+      <MoviesCardListSaved
+        savedMovies={savedMovies}
+        value={value}
+        onMovieDelete={handleMovieDelete}
+      />
     </section>
   );
 };

@@ -46,7 +46,7 @@
 .login__title {
   font-weight: 500;
 	font-size: 24px;
-	line-height: 1.2; 
+	line-height: 1.2;
 	margin: 40px 0;
   align-self: flex-start;
 }
@@ -115,6 +115,16 @@
   margin-bottom: 6px;
 }
 
+.login__submit-error {
+  margin-top: 164px;
+}
+
+@media screen and (max-width: 500px) {
+  .login__submit-error {
+    margin-top: 251px;
+  }
+}
+
 .login__submit-btn {
   font-weight: 500;
 	font-size: 14px;
@@ -127,7 +137,7 @@
   display: block;
   height: 45px;
   width: 100%;
-  margin: 198px auto 16px;
+  margin: 20px auto 16px;
 }
 
 .register__submit-btn:hover {
@@ -138,7 +148,6 @@
 @media screen and (max-width: 500px) {
   .login__submit-btn {
     font-size: 12px;
-    margin-top: 285px;
   }
 }
 

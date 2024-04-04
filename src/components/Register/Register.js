@@ -1,25 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Register.css";
+import { useForm } from "../../hooks/useForm";
 
-export const Register = () => {
-  const [formValue, setFormValue] = useState({
-    firstname: "",
-    email: "",
-    password: "",
-  });
+export const Register = ({ onRegister, errorRegister }) => {
+  const { isValid, values, handleChange, errors } = useForm();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
-
-  function handleRegister(e) {
+  function handleSubmit(e) {
     e.preventDefault();
+    onRegister(values);
   }
 
   return (
@@ -27,7 +16,7 @@ export const Register = () => {
       <div className="register__container">
         <Link to="/" className="register__logo"></Link>
         <h2 className="register__title">Добро пожаловать!</h2>
-        <form className="register__form" onSubmit={handleRegister}>
+        <form className="register__form" onSubmit={handleSubmit} noValidate>
           <label className="register__label" htmlFor="name">
             Имя
             <input
@@ -35,16 +24,15 @@ export const Register = () => {
               type="text"
               id="name"
               name="name"
-              value={formValue.name}
-              onChange={handleChange}
               placeholder=""
+              value={values.name}
+              onChange={handleChange}
               minLength={2}
               maxLength={30}
+              pattern="^(?:[a-zA-Zа-яёА-ЯЁ]{1,}[\s\-]?[a-zA-Zа-яёА-ЯЁ]{1,}?)$"
               required
             />
-            <span className="register__error">
-              Имя не может содержать меньше двух букв
-            </span>
+            {!isValid && <span className="register__error">{errors.name}</span>}
           </label>
           <label className="register__label" htmlFor="email">
             E-mail
@@ -53,12 +41,15 @@ export const Register = () => {
               type="email"
               id="email"
               name="email"
-              value={formValue.email}
+              value={values.email}
               onChange={handleChange}
               placeholder=""
+              pattern="^\S+@\S+\.\S+$"
               required
             />
-            <span className="register__error">Что-то пошло не так...</span>
+            {!isValid && (
+              <span className="register__error">{errors.email}</span>
+            )}
           </label>
           <label className="register__label" htmlFor="password">
             Пароль
@@ -67,24 +58,27 @@ export const Register = () => {
               type="password"
               id="password"
               name="password"
-              value={formValue.password}
+              value={values.password}
               onChange={handleChange}
               placeholder=""
               minLength={5}
               maxLength={15}
               required
             />
-            <span className="register__error">Что-то пошло не так...</span>
+            {!isValid && (
+              <span className="register__error">{errors.password}</span>
+            )}
           </label>
+          <span className="register__submit-error error">{errorRegister}</span>
+          <button
+            type="submit"
+            className="register__submit-btn submit-btn"
+            aria-label="зарегистрироваться"
+            disabled={!isValid}
+          >
+            Зарегистрироваться
+          </button>
         </form>
-        <button
-          className="register__submit-btn"
-          type="submit"
-          aria-label="зарегистрироваться"
-          onSubmit={handleRegister}
-        >
-          Зарегистрироваться
-        </button>
         <Link to="/signin" className="register__login-btn">
           Уже зарегистрированы?{" "}
         </Link>

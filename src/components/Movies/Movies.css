@@ -1,7 +1,15 @@
-.movies {
+.movies-main {
 	margin: 0 auto;
   max-width: 1280px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.movies-main__error-load {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.2;
+  color: inherit;
+  width: 80%;
 }
