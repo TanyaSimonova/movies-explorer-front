@@ -1,11 +1,9 @@
 import React from "react";
 import "./AboutMe.css";
 import photo from "../../images/my_photo.jpg";
-import { AboutMeInfo, AboutVitaliy } from "../../utils/constants";
+import { AboutMeInfo } from "../../utils/constants";
 
 const AboutMe = () => {
-  //чтобы проверить текст макета
-  //{aboutVitaliy}
 
   return (
     <section className="about-me">
