@@ -16,5 +16,7 @@
 * добавление и удаление фильмов из списка сохраненных;
 
 [**Backend** репозиторий поиска фильмов](https://github.com/TanyaSimonova/movies-explorer-api.git).
-
+<!--
 [Готовый проект](https://movies-explorer.pnk.nomoredomainswork.ru).
+-->
+<a href="https://movies-explorer.pnk.nomoredomainswork.ru" target="_blank">Готовый проект</a>
