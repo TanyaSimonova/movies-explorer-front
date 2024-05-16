@@ -18,7 +18,10 @@ Frontend приложения для поиска фильмов. С его по
 * сохранение данных поисковика при перезагрузке в localStorage;
 * отображение необходимого количества фильмов в зависимости от ширины экрана;
 * добавление и удаление фильмов из избранного;
-* структура по BEM;
+* первичная валидация данных библиотекой Joi;
+* основная валидация перед записью в БД схемой и моделью Mongoose;
+* логирование;
+* структура проекта по BEM; 
 
 ## Технологии 🛠
 
@@ -26,6 +29,9 @@ Frontend приложения для поиска фильмов. С его по
   <img src="https://github.com/devicons/devicon/blob/master/icons/html5/html5-original.svg" title="HTML5" alt="HTML" width="40" height="40"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="JavaScript" alt="JavaScript" width="40" height="40"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original.svg" title="React" alt="React" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/express/express-original-wordmark.svg" title="Express" alt="JavaScript" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/mongoose/mongoose-original.svg" title="Mongoose" alt="Mongoose" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/mongodb/mongodb-original.svg" title="MongoDB" alt="MongoDB" width="40" height="40"/>&nbsp;
 
 ## Инструкция по запуску 🏁
 
@@ -51,5 +57,4 @@ npm run start
 
 - Node.js версии 18.16.0  
 
-- MongoDB версии 4.4.14 (любая мажорная 4.4.х)
 
